@@ -1,0 +1,23 @@
+- hosts: all
+  become: true
+
+  tasks:
+
+    - name: Create hello.txt file with content
+      copy:
+        dest: /tmp/hello.txt
+        content: "Hello, Hemanth"
+        mode: "0777"
+
+    - name: Read hello.txt file
+      shell: cat /tmp/hello.txt
+      register: filecontent
+
+    - name: Print file content
+      debug:
+        var: filecontent.stdout
+
+    - name: Create hemanth.txt file
+      copy:
+        dest: /tmp/hemanth.txt
+        content: "{{ filecontent.stdout }}"
