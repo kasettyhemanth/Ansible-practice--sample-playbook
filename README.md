@@ -1,11 +1,14 @@
-Ansible Installation Script (via pip)
-This script installs Ansible using pip and configures the environment for usage. It:
+# Ansible Installation Script (via pip)
 
-Installs Python 3 and pip using system package manager
-Installs Ansible via pip
-Adds the Ansible binary path to the user's shell profile
-Generates a default ansible.cfg in /etc/ansible
-Script
+This script installs Ansible using `pip` and configures the environment for usage. It:
+- Installs Python 3 and pip using system package manager
+- Installs Ansible via `pip`
+- Adds the Ansible binary path to the user's shell profile
+- Generates a default `ansible.cfg` in `/etc/ansible`
+
+## Script
+
+```bash
 #!/bin/bash
 set -e
 
@@ -54,8 +57,13 @@ echo "Generate Default ansible.cfg Using Command"
 sudo mkdir -p /etc/ansible
 sudo chown -R $USER:$USER /etc/ansible
 ansible-config init --disabled > /etc/ansible/ansible.cfg
-Usage
+```
+
+## Usage
+
 Run the script with:
 
+```bash
 chmod +x install-ansible.sh
 ./install-ansible.sh
+```
