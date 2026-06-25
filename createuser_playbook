@@ -1,0 +1,24 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Create a user
+      user:
+        name: hemanth
+        password: "{{ 'Hemanth@123' | password_hash('sha512') }}"
+        shell: /bin/bash
+    - name: Add the user to sudoers file
+      lineinfile:
+        path: /etc/sudoers
+        insertafter: "^%wheel"
+        line: "hemanth ALL=(ALL) NOPASSWD:ALL"
+        validate: "/usr/sbin/visudo -cf %s"
+    - name: Enable password authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication yes'
+    - name: Restart SSH service
+      service:
+        name: sshd
+        state: restarted
