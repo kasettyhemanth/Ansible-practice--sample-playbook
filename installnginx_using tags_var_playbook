@@ -1,4 +1,9 @@
 - hosts: webserver
+  vars:
+    training_center_name: "Hemanth's Training Center"
+    trainer_name: "Hemanth"
+    printphonenum: "yes"
+    phone_number: "123-456-7890"
   become: true
   tasks:
     - name: Install Nginx
@@ -18,4 +23,4 @@
         name: nginx
         state: started
       tags:
-        -install
+        - start
