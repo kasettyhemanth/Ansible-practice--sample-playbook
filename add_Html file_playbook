@@ -1,0 +1,8 @@
+<h1> welcome to {{training center name}} </h1>
+<h2> Ansible Training </h2>
+<h3> trainer: {{trainer_name}} </h3>
+{% if printphonenum== 'yes' %  }
+    <p>Phone Number: {{phone_number}}</p>
+{% else %}
+    <p>Phone Number: Not provided</p>
+{% endif % }
