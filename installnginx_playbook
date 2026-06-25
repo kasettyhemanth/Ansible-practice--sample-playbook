@@ -1,0 +1,21 @@
+- hosts: webserver
+  become: true
+  tasks:
+    - name: Install Nginx
+      package:
+        name: nginx
+        state: present
+      tags:
+        - install
+    - name: Copy index.html
+      copy:
+        src: index.html
+        dest: /usr/share/nginx/html/index.html
+      tags:
+        - copy
+    - name: start Nginx
+      service:
+        name: nginx
+        state: started
+      tags:
+        -install
