@@ -1,55 +1,67 @@
-- hosts: all    
+---
+- hosts: all
   become: true
+
   tasks:
     - name: Copy Hello.txt file to /tmp directory
       copy:
-        src:"Hello.txt"
+        src: "Hello.txt"
         dest: "/tmp/Hello.txt"
         mode: "0777"
-    - name: Copy Hi.txt file to /tmp directory
+
+    - name: Copy Hi.txt file to /var directory
       copy:
-        src:"Hi.txt"
+        src: "Hi.txt"
         dest: "/var/Hi.txt"
         mode: "0666"
-    - name: Copy demo.txt file to /tmp directory
+
+    - name: Copy demo.txt file to /etc directory
       copy:
-        src:"demo.txt"
+        src: "demo.txt"
         dest: "/etc/demo.txt"
         mode: "0655"
 
 # to create multiple files using and define as a variable and use it in playbook, we can create a variable file_details and add the source, destination and mode of the files to be created. Then we can use this variable in the playbook to create multiple files using loop.
 
+---
 - hosts: all
   become: true
-  var:
-    file Details:
-      - {"source": "Hello.txt", "destination": "/tmp/Hello.txt", "mode": "0777"}
-      - {"source": "Hi.txt", "destination": "/var/Hi.txt", "mode": "0666"}
-      - {"source": "demo.txt", "destination": "/etc/demo.txt", "mode": "0655"}
+
+  vars:
+    file_details:
+      - { source: "Hello.txt", destination: "/tmp/Hello.txt", mode: "0777" }
+      - { source: "Hi.txt", destination: "/var/Hi.txt", mode: "0666" }
+      - { source: "demo.txt", destination: "/etc/demo.txt", mode: "0655" }
+
   tasks:
-  - name: Copy files
-    copy:
-      src: "{{ item.source }}"
-      dest: "{{ item.destination }}"
-      mode: "{{ item.mode }}"
-    loop: "{{ file Details }}"
+    - name: Copy files
+      copy:
+        src: "{{ item.source }}"
+        dest: "{{ item.destination }}"
+        mode: "{{ item.mode }}"
+      loop: "{{ file_details }}"
      
 
 # to create amultiple files using loop, we can create a variable file_details and add the source, destination and mode of the files to be created. Then we can use this variable in the playbook to create multiple files using loop.
 
+---
 - hosts: all
   become: true
+
   vars:
     file_details:
       - source: "Hello.txt"
         destination: "/tmp/Hello.txt"
         mode: "0777"
+
       - source: "Hi.txt"
-        destination: "/var/Hi.txt"  
+        destination: "/var/Hi.txt"
         mode: "0666"
+
       - source: "demo.txt"
-        destination: "/etc/demo.txt"  
+        destination: "/etc/demo.txt"
         mode: "0655"
+
   tasks:
     - name: Copy files using loop
       copy:
@@ -59,10 +71,13 @@
       loop: "{{ file_details }}"
 
 # to create a separate file for variables and use it in playbook, create a file called file_details.yml and add the below content to it. Then add this file to vars_files in playbook.  
-- hosts: all  
+---
+- hosts: all
   become: true
+
   vars_files:
     - file_details.yml
+
   tasks:
     - name: Copy files using loop
       copy:
@@ -72,15 +87,18 @@
       loop: "{{ file_details }}"
 
 # fine is save as file_details.yml  add to vars_files in playbook
-  {
-   file_details:
-      - source: "Hello.txt"
-        destination: "/tmp/Hello.txt"
-        mode: "0777"
-      - source: "Hi.txt"
-        destination: "/var/Hi.txt"  
-        mode: "0666"
-      - source: "demo.txt"
-        destination: "/etc/demo.txt"  
-        mode: "0655" 
+  { 
+    ---
+file_details:
+  - source: "Hello.txt"
+    destination: "/tmp/Hello.txt"
+    mode: "0777"
+
+  - source: "Hi.txt"
+    destination: "/var/Hi.txt"
+    mode: "0666"
+
+  - source: "demo.txt"
+    destination: "/etc/demo.txt"
+    mode: "0655"
   }
